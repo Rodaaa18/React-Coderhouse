@@ -1,8 +1,3 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 .none{
     display: none;
 }
@@ -13,9 +8,6 @@
     margin: 1%;
     text-decoration: none;
     color: black;
-}
-.link__cart__container{
-    position: relative;
 }
 .cart__count{
     display: flex;

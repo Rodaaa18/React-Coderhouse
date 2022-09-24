@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import CardWidget from '../CardWidget/CardWidget';
 
-const Navbar = () => {
+const Navbar = (props) => {
 
     const [categories, setCatgories] = useState([]);
+    const [cartItems, setCartItems] = useState(0);
 
     useEffect(() => {
       axios
@@ -27,7 +29,7 @@ const Navbar = () => {
                     <a className="nav-link " aria-current="page" href="#">Home</a>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link" href="#">Products</a>
+                    <Link className="nav-link" to="/products">Products</Link>
                     </li>
                     <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -48,12 +50,13 @@ const Navbar = () => {
                     <a className="nav-link ">About</a>
                     </li>
                 </ul>
-                <form className="d-flex" role="search">
+                <CardWidget cartItems= {props.cartList.length}/>
+                <form className="d-flex mr-3" role="search">                    
                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-success" type="submit">Search</button>
-                    
+                    <button className="btn btn-outline-success" type="submit">Search</button>                    
                 </form>
-                <Link className="btn btn-outline-success" to="/login">
+
+                <Link className="btn btn-outline-success ml-3" to="/login">
                     Iniciar Sesión
                 </Link>               
                 </div>

@@ -6,14 +6,21 @@ import {
   Route,
 } from "react-router-dom";
 import Login from "./Components/Login/Login";
-
+import ItemListContainer from './Components/ItemListContainer/ItemListContainer';
+import React, { useEffect, useState } from 'react'
 function App() {
+  const [cartList, setCartList] = useState([]);
+  const addProduct=(product)=>{
+    let carrito = [... cartList];
+    carrito.push(product)
+    setCartList(carrito);
+}
   return (
     <Router>
-      <Navbar />
+      <Navbar cartList = {cartList}/>
       <Switch>
         <Route path="/login"exact element={<Login /> } />
-        {/* <Route path="/" exact element={<Productos />} /> */}
+        <Route path="/products" exact element={<ItemListContainer addProduct = {addProduct}/>} /> 
       </Switch>
   </Router>
   );
