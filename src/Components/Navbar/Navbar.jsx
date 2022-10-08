@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from 'axios';
 import CardWidget from '../CardWidget/CardWidget';
 
@@ -8,6 +8,7 @@ const Navbar = (props) => {
 
     const [categories, setCatgories] = useState([]);
     const [cartItems, setCartItems] = useState(0);
+    const [navigate, setNavigate] = useState(false);
 
     useEffect(() => {
       axios
@@ -15,7 +16,11 @@ const Navbar = (props) => {
       .then(res => setCatgories(res.data))
     }, [])
     
-
+    const sesionClose =(e)=>{
+        e.preventDefault();
+        localStorage.clear();
+        setNavigate(true);
+    }
   return (
         <nav className="navbar navbar-expand-lg bg-light">
             <div className="container-fluid">
@@ -56,8 +61,11 @@ const Navbar = (props) => {
                     <button className="btn btn-outline-success" type="submit">Search</button>                    
                 </form>
 
-                <Link className="btn btn-outline-success ml-3" to="/login">
-                    Iniciar Sesión
+                <Link className="btn btn-outline-danger ml-3" onClick={(e)=>sesionClose(e)} to="/">
+                    Cerrar Sesión
+                    {
+                        navigate ? <Navigate to="/login"></Navigate> : null
+                    }
                 </Link>               
                 </div>
             </div>

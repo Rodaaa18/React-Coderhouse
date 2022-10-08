@@ -1,29 +1,64 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import "./Login.css";
+import swal from 'sweetalert';
+import { Navigate } from "react-router-dom";
+
 /* user : john@gmail.com*/
 /*pass: m38rmF$*/
 const Login = () => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
+    const [redirect, setRedirect] = useState(false);
+    const USER_LOGIN = "user";
+    
 
-    const usuario = "john@gmail.com";
-    const contraseña = "m38rmF$";
-
-    const LoginSend=()=>{
-        if(user === usuario && password === contraseña){
-            fetch('https://fakestoreapi.com/auth/login',{
-                method:'POST',
-                body:JSON.stringify({
-                    username: user,
-                    password: password
-                })
-            })
-                .then(res=>res.json())
-                .then(json=>console.log(json))
-        }
-        
+    const usuario = {
+        "username" : "admin",
+        "password" : "admin"
     }
+    
+    
+    const LoginSend=(e)=>{
+        e.preventDefault();            
+            if(user !== usuario.username){
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Usuario o contraseña inválidos',
+                });
+                setRedirect(false); 
+                return;
+           }
+           if(password !== usuario.password){
+            swal({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Usuario o contraseña inválidos',
+            });
+            setRedirect(false); 
+            return;
+            }
+            if(user !== usuario.username && password !== usuario.password){
+                swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Usuario o contraseña inválidos',
+                });
+                setRedirect(false); 
+                return;
+           }
+            
+             swal({
+             title: "Sesión iniciada!",
+             text: "Bienvenido!",
+             icon: "success",
+             timer: 3000,
+         });   
+         setRedirect(true); 
+         localStorage.setItem(USER_LOGIN, JSON.stringify(usuario));
+    }
+        
+    
     
   return (
     <div className="row">
@@ -34,7 +69,7 @@ const Login = () => {
                         <img className='login__box__header__img' src="https://www.antevenio.com/wp-content/uploads/2020/01/tienda-online.jpg" alt="404 Image Not Found" />
                     </div>
                     <div className='login__box__body'>
-                        <form action="" className='login__box__body__form' onSubmit={LoginSend} >
+                        <form action="" className='login__box__body__form' onSubmit={(e)=>LoginSend(e)} >
                             <div className='login__box__body__form__texts'>
                                 <label htmlFor="user"> Usuario</label>
                                 <input type="text" name="user" id="user" onChange={(e)=> setUser(e.target.value)} value={user}/>
@@ -46,6 +81,9 @@ const Login = () => {
                             <div className='login__box__body__form__texts'>
                                 <button className='login__box__body__form__btn' type="submit">Ingresar</button>
                             </div>
+                            {
+                                redirect ? <Navigate to="/"></Navigate> : null
+                            }
                         </form>
                     </div>
                     <div className='login__box__footer'>
