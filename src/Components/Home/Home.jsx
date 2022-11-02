@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 import { Navigate } from "react-router-dom";
 import ErrorPage from '../ErrorPage/ErrorPage.jsx';
 
-const Home = (props) => {
+const Home = () => {
     
 
     const [user, setUser] = useState({});

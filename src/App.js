@@ -12,37 +12,30 @@ import React, { useEffect, useState } from 'react'
 import Home from './Components/Home/Home.jsx';
 import ErrorPage from './Components/ErrorPage/ErrorPage.jsx';
 import ItemDetailContainer from './Components/ItemDetailContainer/ItemDetailContainer.jsx';
+import {ProductContext} from './Context/productContext.jsx';
+import Cart from './Components/Cart/Cart';
 function App() {
 
-  const [cartList, setCartList] = useState([]);
   let location = useLocation();
-  const addProduct=(product)=>{
-    let carrito = [... cartList];
-    carrito.push(product)
-    setCartList(carrito);    
-  }
+  
   
   return (
-    //Encerrar a todos con el Context, crear carpeta Store o Context. Creo el UserContext o como quiera depende que guarde. importar de react el createContext.
-    //const userContext = createContext().
-    // definimos Provider.function UserContextProvider(props){ return(
-    // <userContext.Provider value={ {user : user} }>
-    //{props.children}
-    //  estos los pongo aca abajo en el App encerrando todo
-    //</userContext.Provider>
-    //) }
     <>
+    <ProductContext>
       {
-        location.pathname !== "/login" && location.pathname !== "/ups" && <Navbar cartList={cartList} />
-        
-      }      
+        location.pathname !== "/login" && location.pathname !== "/ups" && <Navbar />        
+      }  
+
       <Switch>
         <Route path="/login" exact element={<Login />} />
-        <Route path="/" exact element={<Home cartList={cartList} />} />
+        <Route path="/" exact element={<Home/>} />
         <Route path="/ups" exact element={<ErrorPage />} />
-        <Route path="/products" exact element={<ItemListContainer addProduct={addProduct} />} />
+        <Route path="/products" exact element={<ItemListContainer />} />
+        <Route path="/products/:category" exact element={<ItemListContainer />} />
         <Route path="/details/:id" exact element={<ItemDetailContainer />} />
+        <Route path="/cart" exact element={<Cart />} />
       </Switch>
+      </ProductContext>
     </>
   );
 }

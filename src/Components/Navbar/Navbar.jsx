@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./Navbar.css";
 import { Link, Navigate } from "react-router-dom";
 import axios from 'axios';
 import CardWidget from '../CardWidget/CardWidget';
+import { productsContext } from '../../Context/productContext';
 
 const Navbar = (props) => {
 
-    const [categories, setCatgories] = useState([]);
     const [cartItems, setCartItems] = useState(0);
     const [navigate, setNavigate] = useState(false);
+    const { productList } = useContext(productsContext);
 
-    useEffect(() => {
-      axios
-      .get("https://fakestoreapi.com/products/categories")
-      .then(res => setCatgories(res.data))
-    }, [])
-    
+    const categoriesMock = [
+        "electronics", "jewelery", "mens-clothing", "womens-clothing" 
+    ]
+    useEffect(()=>{
+        console.log(productList)
+    },[])
     const sesionClose =(e)=>{
         e.preventDefault();
         localStorage.clear();
@@ -42,10 +43,10 @@ const Navbar = (props) => {
                     </a>
                     <ul className="dropdown-menu">
                         {
-                            categories.map((cat, i)=>{
+                            categoriesMock.map((cat, i)=>{
                                 return (
-                                    <li key={i}><a className="dropdown-item" href="#">{cat[0].toUpperCase() +  
-                                        cat.slice(1)}</a></li>
+                                    <li key={i}><Link className="dropdown-item" to={`/products/${cat}`}>{cat[0].toUpperCase() +  
+                                        cat.slice(1)}</Link></li>
                                 )
                             })                            
                         }
@@ -55,7 +56,7 @@ const Navbar = (props) => {
                     <a className="nav-link ">About</a>
                     </li>
                 </ul>
-                <CardWidget cartItems= {props.cartList.length}/>
+                <CardWidget cartItems= {productList.length}/>
                 <form className="d-flex mr-3" role="search">                    
                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                     <button className="btn btn-outline-success" type="submit">Search</button>                    

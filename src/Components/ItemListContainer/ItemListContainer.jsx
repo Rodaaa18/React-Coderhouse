@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./ItemListContainer.css";
-import { getProducts } from '../../MockData/Products.js';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { productsContext } from '../../Context/productContext.jsx';
+import { getProducts, getProductsByCategory } from '../../Services/firebase';
 
-const ItemListContainer = (props) => {
+const ItemListContainer = () => {
     const [products, setProducts] = useState([]);
+    
+    
+    let params = useParams();
     useEffect( () => {
-        //  axios
-        // .get("https://fakestoreapi.com/products")
-        // .then(res => setProducts(res.data))
-        getProducts().then(res => setProducts(res));
-      }, []);
+       params.category ? getProductsByCategory(params.category).then(resp => setProducts(resp)) : getProducts().then(res => setProducts(res));
+       
+      }, [params.category]);
 
     
   return ( 
@@ -19,14 +21,14 @@ const ItemListContainer = (props) => {
                 {
                     products.map(prod=>{
                         return(
-                            <div key={`${prod.id}key`} className='col-xs-12 col-sm-8 col-md-6 col-lg-4 col-xl-3'>
+                            <div key={prod.id} className='col-xs-12 col-sm-8 col-md-6 col-lg-4 col-xl-3'>
                             <div  className="card card__style" >
                                 <img src={prod.image} className="cardlist__img" alt="..."/>
                                 <div className="card-body">
                                     <h5 className="card__title card-title">{prod.title}</h5>
                                     <p className="card-text mt-0">${prod.price}</p>
-                                    <a href="#" className="btn btn-danger" onClick={()=>props.addProduct(prod)}>Add Product</a>
-                                    <Link to={`/details/${prod.id}`} className="btn btn-primary ml-3" >Details</Link>
+                                    
+                                    <Link to={`/details/${prod.id}`} className="btn btn-primary ml-3 mt-2" >Details</Link>
                                 </div>
                             </div>
                             </div>
